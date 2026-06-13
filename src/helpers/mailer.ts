@@ -1,10 +1,23 @@
+import User from '@/models/userModel';
 import nodemailer from 'nodemailer'
-
+import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
 
 export const sendEmail = async({email, emailType, userId}:any) =>{
     try {
-        //TODO: configure mail for usage
+        
+        // const hashedToken = await bcrypt.hash(userId.toString(), 10)
+        const hashedToken = uuidv4();
 
+        if(email==="VERIFY"){
+            await User.findByIdAndUpdate(userId, 
+                {verifyToken: hashedToken, verifyTokenExpiry: Date.now() + 3600000})
+        }
+        else if(email==="RESET"){
+            await User.findByIdAndUpdate(userId, 
+                {forgotPasswordToken: hashedToken, forgotPasswordTokenExpiry: Date.now() + 3600000})
+        }
+        
         const transporter = nodemailer.createTransport({
             host: "smtp.example.com",
             port: 587,

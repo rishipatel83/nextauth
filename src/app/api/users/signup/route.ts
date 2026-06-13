@@ -8,8 +8,8 @@ connect()
 
 export async function POST(request:NextRequest) {
     try {
-        const reqBody = request.json()
-        const {username, email, password}:any = reqBody
+        const reqBody = await request.json()
+        const {username, email, password} = reqBody
         //validation
         console.log(reqBody)
         const user = await User.findOne({email})
