@@ -11,13 +11,20 @@ export const sendEmail = async({email, emailType, userId}:any) =>{
 
         console.log("hashedToken : ",hashedToken);
         
-        if(email==="VERIFY"){
+        if(emailType==="VERIFY"){
             await User.findByIdAndUpdate(userId, 
-                {verifyToken: hashedToken, verifyTokenExpiry: Date.now() + 3600000})
+                {
+                    $set:{verifyToken: hashedToken, verifyTokenExpiry: Date.now() + 3600000}
+                }
+            )
         }
-        else if(email==="RESET"){
+        
+        else if(emailType==="RESET"){
             await User.findByIdAndUpdate(userId, 
-                {forgotPasswordToken: hashedToken, forgotPasswordTokenExpiry: Date.now() + 3600000})
+                {
+                    $set:{forgotPasswordToken: hashedToken, forgotPasswordTokenExpiry: Date.now() + 3600000}
+                }
+            )
         }
 
         const htmlContent = `<p>Click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}

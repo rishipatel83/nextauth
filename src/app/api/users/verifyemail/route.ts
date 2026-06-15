@@ -8,16 +8,16 @@ export async function POST(request:NextRequest){
     try {
         const reqBody = await request.json();
         console.log("reqBody in verifyemail : ", reqBody)
-        const {token} = reqBody
+        const { token } = reqBody
         console.log(token)
         // assuming we got the token no edge cases here
 
-        const user = await User.findOne({verifyToken: token},{
+        const user = await User.findOne({verifyToken: token, 
             verifyTokenExpiry: {$gt: Date.now()} //* is this a aggregation pipeline
         })
 
         if(!user){
-            return NextResponse.json({error: "Invalid token"},{status: 400})
+            return NextResponse.json({error: "Invalid token no user with the token "},{status: 400})
         }
         console.log("user got on verifyEmail : ", user)
 
