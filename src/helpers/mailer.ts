@@ -9,7 +9,7 @@ export const sendEmail = async({email, emailType, userId}:any) =>{
         const hashedToken = await bcrypt.hash(userId.toString(), 10)
         // const hashedToken = uuidv4();
 
-        console.log(hashedToken);
+        console.log("hashedToken : ",hashedToken);
         
         if(email==="VERIFY"){
             await User.findByIdAndUpdate(userId, 
