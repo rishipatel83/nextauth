@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { toast } from 'react-hot-toast'
+import { toast, Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -19,16 +19,23 @@ export default function SignupPage() {
     const [loading, setLoading] = useState(false)
 
     const onSignup = async () =>{
+        let toastId
         try {
             setLoading(true)
+            toastId = toast.loading('Processing...')
             const response = await axios.post("/api/users/signup", user)
             console.log("Signup success ", response)
-
-            router.push('/login')
+            console.log(response.data.message)
+            toast.success("Signup Successfully", { id: toastId })
+            // router.push('/login')
+            setTimeout(() => {
+                router.push('/login')
+            }, 1000);
 
         } catch (error: any) {
             console.log("Signup Failed")
-            toast.error(error.message)
+            console.log(error.response.data.error)
+            toast.error(error.response?.data?.error || "Something went wrong!", { id: toastId });
         } finally {
             setLoading(false)
         }
@@ -39,10 +46,11 @@ export default function SignupPage() {
     //     else setButtonDisabled(true)
     // },[user])
 
-    const buttonDisabled = !(user.email.length > 0 && user.password.length > 0 && user.username.length > 0);
+    const buttonDisabled = loading || !(user.email.length > 0 && user.password.length > 0 && user.username.length > 0);
 
     return (
         <div className='flex flex-col items-center justify-center min-h-screen py-2'>
+            <Toaster/>
             <h1 className='mb-4 text-2xl'>{loading ? "Processing" : "Sign up"}</h1>
             <hr />
             <label htmlFor="username"></label>
@@ -75,11 +83,11 @@ export default function SignupPage() {
             />
 
             <button
-                className= {`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 ${buttonDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                className= {`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 ${buttonDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
                 disabled = {buttonDisabled}
                 onClick={onSignup}
             >
-                {buttonDisabled ? "No signup" : "Signup"}
+                {loading ? "Processing..." : "Signup"}
             </button>
             <Link href='/login' className='underline text-blue-400'>Login Instead</Link>
         </div>
