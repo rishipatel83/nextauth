@@ -18,13 +18,13 @@ export async function POST(request:NextRequest) {
             return NextResponse.json({error: "User does not exists"},{status:400})
         }
 
-        console.log("User exists")
-
+        
         const validPassword = await bcrypt.compare(password, user.password)   //this will return true or false
-
+        
         if(!validPassword){
             return NextResponse.json({error: "Check your credentials"},{status:400})
         }
+        console.log("User exists")
         
         // now we will create a token, for the token we require data 
         // token is long encrypted string where we put our payload 
