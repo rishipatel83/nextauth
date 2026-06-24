@@ -37,12 +37,12 @@ export default function ProfilePage() {
             <hr />
             <button
             onClick={logout}
-            className="bg-blue-500 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-blue-500 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
             >Logout</button>
 
             <button
             onClick={getUserDetails}
-            className="bg-green-800 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-green-800 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
             >GetUser Details</button>
         </div>
     )
